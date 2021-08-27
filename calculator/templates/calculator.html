@@ -1,0 +1,77 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+    <div class="row">
+        <div class="col-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title text-center">Calculator</h4>
+                </div>
+                <div class="card-body">
+                    <div class="m-3" id="msg">
+
+                    </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        <div class="form-group row">
+                            <div class="col-md-7">
+                                <label for="expression">Expression:</label>
+                                <input type="text" name="expression" id="expression" class="form-control form-control-sm text-right" placeholder="Place expression...">
+                            </div>
+                            <label><i class="far fa-equals m-2 col-md-2"></i></label>
+                            <div class="col-md-3">
+                                <label for="Result">Result:</label>
+                                <input type="text" name="result" id="result" class="form-control form-control-sm text-right" placeholder="Result" disabled>
+                            </div>
+                        </div>
+                    </div>                                  
+                </div>
+                <div class="card-footer">
+                    <button id="btn-calculate" class="btn btn-primary btn-sm float-right">Calculate</button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block scripts %}
+    <script>
+        $(document).ready(()=>{
+            let btn1=document.getElementById("btn-calculate");
+            btn1.addEventListener("click", function (e) {
+                e.preventDefault();
+                let expression=document.getElementById("expression");
+                console.log(expression.value)       
+                let _url='/calculator/'
+                fetch(_url, {
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'application/json',
+                        'X-CSRFToken':csrftoken,
+
+                    },
+                    body: JSON.stringify({'expression':expression.value})
+                })
+                .then((response) => {
+                        return response.json()
+                })
+                .then((data) => {
+                    if(data.success== true){
+                        document.getElementById("result").value=data.result
+                    }
+                    else{
+                       let message= `<div class="alert alert-danger  alert-dismissible fade show m-3">
+                            <strong>${ data.message }</strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>`
+                        document.getElementById("msg").innerHTML = message
+                    }
+                })
+
+            })
+            
+            
+        })
+    </script>
+{% endblock scripts %}

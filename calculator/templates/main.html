@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <title>Calculator</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+        <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/fontawesome-pro/css/all.min.css'%}" />
+        
+
+        <script type="text/javascript">
+
+            function getToken(c_name) {
+                if(document.cookie.length > 0){
+                    c_start=document.cookie.indexOf(c_name + '=');
+                    if(c_start != -1){
+                        c_start=c_start + c_name.length + 1;
+                        c_end=document.cookie.indexOf(";", c_start);
+                        if(c_end == -1) c_end = document.cookie.length;
+                        return unescape(document.cookie.substring(c_start, c_end));
+                    }
+
+                }
+                return '';
+                
+            }
+            var csrftoken=getToken('csrftoken');          
+        </script>
+        {% block header %}
+        {% endblock header %}
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#">MyApp</a>
+        
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'calculator' %}">Calculator <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'history' %}">History</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+            </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+            {% if request.user.is_authenticated %}
+                <span class="text-white">Hello, {{ request.user}} </span>
+                <a class="text-white nav-link" href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a class="text-white nav-link" href="{% url 'login' %}">Login</a>
+            {% endif %}
+            </form>
+        </div>
+        </nav>
+
+        <div class="container mt-5">
+            {% block content %}
+            {% endblock content %} 
+        </div>  
+        <script src="{% static 'jquery.js' %}"></script>
+        <script src="{% static 'bootstrap.min.js' %}"></script>
+        {%block scripts %}
+        {% endblock scripts %}
+    </body>
+</html>
