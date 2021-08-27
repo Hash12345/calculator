@@ -21,6 +21,8 @@
                                     <td>{{ data.expression }}</td>
                                     <td>{{ data.result }}</td>
                                 </tr>
+                            {% empty %}
+                                <tr><td class="text-center" colspan="3">No history to show. click <a href="{% url 'calculator' %}">here</a> to calculate expression</td></tr>
                             {% endfor %}
                         </tbody>
                     </table>

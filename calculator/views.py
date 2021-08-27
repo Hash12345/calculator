@@ -10,6 +10,7 @@ from .forms import *
 from ast import literal_eval
 
 # Create your views here.
+@login_required
 def index(request):
     return render(request, 'index.html')
 def register_page(request):
@@ -70,21 +71,21 @@ def calculator_page(request):
         data =json.loads(request.body)
         try:
             result = eval(data['expression'])
-            Calculator.objects.create(expression=data['expression'], result=result )
+            Calculator.objects.create(expression=data['expression'], result=result, user=request.user )
             data={
                 'success':True,
                 'result': result
             }
             return JsonResponse(data, safe=False)
         except ZeroDivisionError:
-            Calculator.objects.create(expression=data['expression'], result='undifined: dividing by zero' )
+            Calculator.objects.create(expression=data['expression'], result='undifined: dividing by zero', user=request.user  )
             data={
                 'success':False,
                 'message': 'undifined: dividing by zero'
             }
             return JsonResponse(data, safe=False)
         except SyntaxError:
-            Calculator.objects.create(expression=data['expression'], result='undifined: syntax error' )
+            Calculator.objects.create(expression=data['expression'], result='undifined: syntax error', user=request.user  )
             data={
                 'success':False,
                 'message': 'undifined: syntax error'
@@ -95,7 +96,7 @@ def calculator_page(request):
 #
 @login_required
 def history_page(request):
-    calculations=Calculator.objects.all()
+    calculations=Calculator.objects.filter(user=request.user)
     context={'calculations':calculations}
     return render(request, 'history.html',context)
 
