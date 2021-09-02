@@ -39,21 +39,24 @@
         
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'calculator' %}">Calculator <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'history' %}">History</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'profile' %}">Profile</a>
-            </li>
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'calculator' %}">Calculator <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'history' %}">History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                    </li>
+                {% endif %}
             </ul>
             <form class="form-inline my-2 my-lg-0">
             {% if request.user.is_authenticated %}
                 <span class="text-white">Hello, {{ request.user}} </span>
                 <a class="text-white nav-link" href="{% url 'logout' %}">Logout</a>
             {% else %}
+                <a class="text-white nav-link" href="{% url 'register' %}">Register</a>
                 <a class="text-white nav-link" href="{% url 'login' %}">Login</a>
             {% endif %}
             </form>

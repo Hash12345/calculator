@@ -12,14 +12,14 @@ class CreateUserForm(UserCreationForm):
     class Meta:
         model=User
         fields=['username', 'first_name','last_name', 'password1', 'password2']
-        widgets={
-            'username':forms.TextInput(attrs={'class':'form-control form-control-sm', 'placeholder':'Nick Name'}),
-            'first_name':forms.TextInput(attrs={'class':'form-control form-control-sm', 'placeholder':'First Name'}),
-            'last_name':forms.TextInput(attrs={'class':'form-control form-control-sm', 'placeholder':'Last Name'}),
-            'password1':forms.PasswordInput(attrs={'class':'form-control form-control-sm', 'placeholder':'Password'}),
-            'password2':forms.PasswordInput(attrs={'class':'form-control form-control-sm', 'placeholder':'Password'}),
 
-        }
+    def __init__(self, *args, **kwargs):
+        super(CreateUserForm,self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class':'form-control form-control-sm', 'placeholder':'Nick Name'})
+        self.fields['first_name'].widget.attrs.update({'class':'form-control form-control-sm', 'placeholder':'First Name'})
+        self.fields['last_name'].widget.attrs.update({'class':'form-control form-control-sm', 'placeholder':'Last Name'})
+        self.fields['password1'].widget.attrs.update({'class':'form-control form-control-sm', 'placeholder':'Password'})
+        self.fields['password2'].widget.attrs.update({'class':'form-control form-control-sm', 'placeholder':'Confirm Password'})
 class UpdateUserForm(UserChangeForm):
     class Meta:
         model=User
